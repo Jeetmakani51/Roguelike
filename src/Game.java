@@ -57,7 +57,21 @@ public class Game{
             case "s" : newY++; break;
             case "d" : newX++; break;
         }
-        if(map.isWalkable(newX,newY)){
+        //if(map.isWalkable(newX,newY)){
+            //player.setPosition(newX, newY);
+        //}
+        Enemy enemy = getEnemyAt(newX, newY);
+
+        if(enemy != null){
+            enemy.takeDamage(1);
+            System.out.println("You hit the enemy!");
+
+            if(enemy.isDead()){
+                System.out.println("Enemy defeated!");
+                enemies.remove(enemy);
+            }
+        }else if(map.isWalkable(newX, newY)){
+            // normal movement
             player.setPosition(newX, newY);
         }
     }
@@ -91,6 +105,7 @@ public class Game{
             System.out.println();
         }
         System.out.println();
+        System.out.println("Enemies left : " + enemies.size());
     }
 
     private boolean isOccupied(int x, int y){
@@ -112,5 +127,13 @@ public class Game{
             }
         }
         return false;
+    }
+    private Enemy getEnemyAt(int x, int y){  // Enemy class after private is a return type because we return e at the end of the function
+        for(Enemy e : enemies){
+            if(e.getX() == x && e.getY() == y){
+                return e; // we use Enemy return type in the function
+            }
+        }
+        return null;
     }
 }
