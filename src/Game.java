@@ -1,7 +1,9 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Game{
     private Scanner scanner = new Scanner(System.in);
+    private ArrayList<Enemy> enemies = new ArrayList<>(); // number of enemies is dynamic
     private boolean isRunning;
     private Map map;
     private Player player;
@@ -9,16 +11,21 @@ public class Game{
     public void start(){
         map = new Map(20,15);
         player = new Player();
-
-
         int x,y;
         do{
             x = (int)(Math.random() * 20); // math.random gives random numbers between 0.0 and 1.0
             y = (int)(Math.random() * 15);//multiply by 20 ex : 0.12*20 = 2.4, then int() gives only 2
         }while(!map.isWalkable(x, y));//so x becomes random number between 0 - 19
 
-        player.setPosition(5,5);
+        player.setPosition(x,y);
 
+        for(int i = 0; i < 5; i++){
+            do{
+                x = (int)(Math.random() * 20);
+                y = (int)(Math.random() * 15);
+            }while(!map.isWalkable(x, y) || isOccupied(x,y));
+            enemies.add(new Enemy(x,y));
+        }
         isRunning = true;
         gameloop();
     }
@@ -37,7 +44,7 @@ public class Game{
         }
     }
     private void processInput(){
-        render();
+        //render();
         System.out.print("move (WASD) : ");
         String input = scanner.nextLine().toLowerCase();
 
@@ -74,12 +81,36 @@ public class Game{
             for(int x = 0; x < grid[y].length; x++){
                 if(x == player.getX() && y == player.getY()){
                     System.out.print("@");
-                }else{
+                }else if(isEnemyAt(x,y)){
+                    System.out.print("E");
+                }
+                else{
                     System.out.print(grid[y][x]);
                 }
             }
             System.out.println();
         }
         System.out.println();
+    }
+
+    private boolean isOccupied(int x, int y){
+        if(player.getX() == x && player.getY() == y){
+            return true;
+        }
+        for(Enemy e : enemies){
+            if(e.getX() == x && e.getY() == y){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isEnemyAt(int x, int y){
+        for(Enemy e : enemies){
+            if(e.getX() == x && e.getY() == y){
+                return true;
+            }
+        }
+        return false;
     }
 }
