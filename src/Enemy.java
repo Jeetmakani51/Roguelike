@@ -3,28 +3,30 @@ public class Enemy {
     private int y;
     private int hp;
 
-    public Enemy(int x, int y){
+    public Enemy(int x, int y) {
         this.x = x;
         this.y = y;
         this.hp = 3;
     }
-    public int getX(){
+
+    public int getX() {
         return x;
     }
-    public int getY(){
+
+    public int getY() {
         return y;
     }
-    public void setPosition(int x, int y){
+
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    public int getHp(){
-        return hp;
-    }
-    public void takeDamage(int damage){
+
+    public void takeDamage(int damage) {
         hp -= damage;
     }
-    public boolean isDead(){
+
+    public boolean isDead() {
         return hp <= 0;
     }
 }
